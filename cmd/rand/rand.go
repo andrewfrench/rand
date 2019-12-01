@@ -29,7 +29,7 @@ source will only include the character types requested.
 The length of the output string can be specified using -c without altering the
 character source.
 
-EXAMPLES:
+Examples:
   $ rand
   rl6gtll2
 

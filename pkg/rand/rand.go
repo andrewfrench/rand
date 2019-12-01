@@ -16,7 +16,7 @@ type Options struct {
 func Make(opts Options) string {
 	source := make([]rune, 0)
 	generated := make([]rune, 0)
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	compileSource(opts, &source)
 	for i := 0; i < opts.Length; i++ {
 		generated = append(generated, source[rand.Intn(len(source))])

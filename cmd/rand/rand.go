@@ -36,8 +36,11 @@ Examples:
   $ rand -luns
   3E0*6hp^
 
-  $ rand -nuc 20
+  $ rand -nuc20
   15NTQV4ASIN1UEQF0MXY
+
+  $ rand -c3
+  zp4
 `
 
 var cmd = &cobra.Command{
@@ -45,7 +48,7 @@ var cmd = &cobra.Command{
 	Short: "A random string and number generation utility.",
 	Long:  randInfo,
 	PreRun: func(_ *cobra.Command, _ []string) {
-		if !opts.Special && !opts.Uppers && !opts.Lowers && !opts.Numbers {
+		if !opts.Specials && !opts.Uppers && !opts.Lowers && !opts.Numbers {
 			opts.Lowers = true
 			opts.Numbers = true
 		}
@@ -61,5 +64,5 @@ func init() {
 	cmd.Flags().BoolVarP(&opts.Lowers, "lowers", "l", false, "include lowercase letters a-z")
 	cmd.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
 	cmd.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
-	cmd.Flags().BoolVarP(&opts.Special, "special", "s", false, "include special characters like !, @, and #")
+	cmd.Flags().BoolVarP(&opts.Specials, "specials", "s", false, "include special characters like !, @, and #")
 }

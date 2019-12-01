@@ -6,11 +6,11 @@ import (
 )
 
 type Options struct {
-	Lowers  bool
-	Uppers  bool
-	Numbers bool
-	Special bool
-	Length  int
+	Lowers   bool
+	Uppers   bool
+	Numbers  bool
+	Specials bool
+	Length   int
 }
 
 func Make(opts Options) string {
@@ -38,7 +38,7 @@ func compileSource(opts Options, dest *[]rune) {
 		*dest = append(*dest, []rune(numbers)...)
 	}
 
-	if opts.Special {
-		*dest = append(*dest, []rune(special)...)
+	if opts.Specials {
+		*dest = append(*dest, []rune(specials)...)
 	}
 }

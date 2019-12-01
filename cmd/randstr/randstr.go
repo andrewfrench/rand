@@ -1,0 +1,65 @@
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/andrewfrench/randstr/pkg/randstr"
+
+	"github.com/spf13/cobra"
+)
+
+var (
+	opts = randstr.Options{}
+)
+
+func main() {
+	err := rand.Execute()
+	if err != nil {
+		os.Exit(1)
+	}
+}
+
+const randInfo = `A random string and number generation utility.
+
+By default, rand will output an eight-character string containing characters
+a-z0-9. If any of the source modifiers -l, -u, -n, or -s are specified, the
+source will only include the character types requested.
+
+The length of the output string can be specified using -c without altering the
+character source.
+
+EXAMPLES:
+  $ rand
+  rl6gtll2
+
+  $ rand -luns
+  3E0*6hp^
+
+  $ rand -nuc 20
+  15NTQV4ASIN1UEQF0MXY
+`
+
+var rand = &cobra.Command{
+	Use:   "rand",
+	Short: "A random string and number generation utility.",
+	Long:  randInfo,
+	PreRun: func(_ *cobra.Command, _ []string) {
+		if !opts.Special && !opts.Uppers && !opts.Lowers && !opts.Numbers {
+			opts.Lowers = true
+			opts.Numbers = true
+		}
+	},
+	Run: func(_ *cobra.Command, _ []string) {
+		generated := randstr.Make(opts)
+		fmt.Println(generated)
+	},
+}
+
+func init() {
+	rand.Flags().IntVarP(&opts.Length, "len", "c", 8, "sets the length, in characters, of the output")
+	rand.Flags().BoolVarP(&opts.Lowers, "lowers", "l", false, "include lowercase letters a-z")
+	rand.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
+	rand.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
+	rand.Flags().BoolVarP(&opts.Special, "special", "s", false, "include special characters like !, @, and #")
+}

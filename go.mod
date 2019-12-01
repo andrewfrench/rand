@@ -1,4 +1,4 @@
-module github.com/andrewfrench/randstr
+module github.com/andrewfrench/rand
 
 go 1.13
 

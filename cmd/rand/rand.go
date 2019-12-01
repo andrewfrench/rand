@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/andrewfrench/randstr/pkg/randstr"
+	"github.com/andrewfrench/rand/pkg/rand"
 
 	"github.com/spf13/cobra"
 )
 
 var (
-	opts = randstr.Options{}
+	opts = rand.Options{}
 )
 
 func main() {
-	err := rand.Execute()
+	err := cmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
@@ -40,7 +40,7 @@ EXAMPLES:
   15NTQV4ASIN1UEQF0MXY
 `
 
-var rand = &cobra.Command{
+var cmd = &cobra.Command{
 	Use:   "rand",
 	Short: "A random string and number generation utility.",
 	Long:  randInfo,
@@ -51,15 +51,15 @@ var rand = &cobra.Command{
 		}
 	},
 	Run: func(_ *cobra.Command, _ []string) {
-		generated := randstr.Make(opts)
+		generated := rand.Make(opts)
 		fmt.Println(generated)
 	},
 }
 
 func init() {
-	rand.Flags().IntVarP(&opts.Length, "len", "c", 8, "sets the length, in characters, of the output")
-	rand.Flags().BoolVarP(&opts.Lowers, "lowers", "l", false, "include lowercase letters a-z")
-	rand.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
-	rand.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
-	rand.Flags().BoolVarP(&opts.Special, "special", "s", false, "include special characters like !, @, and #")
+	cmd.Flags().IntVarP(&opts.Length, "len", "c", 8, "sets the length, in characters, of the output")
+	cmd.Flags().BoolVarP(&opts.Lowers, "lowers", "l", false, "include lowercase letters a-z")
+	cmd.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
+	cmd.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
+	cmd.Flags().BoolVarP(&opts.Special, "special", "s", false, "include special characters like !, @, and #")
 }

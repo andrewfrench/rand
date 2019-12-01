@@ -1,4 +1,4 @@
-package randstr
+package rand
 
 const (
 	lowers  = "abcdefghijklmnopqrstuvwxyz"

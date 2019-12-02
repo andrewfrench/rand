@@ -20,7 +20,7 @@ func main() {
 	}
 }
 
-const randInfo = `A random string and number generation utility.
+const info = `A random string and number generation utility.
 
 By default, rand will output an eight-character string containing characters
 a-z0-9. If any of the source modifiers -l, -u, -n, or -s are specified, the
@@ -31,22 +31,22 @@ character source.
 
 Examples:
   $ rand
-  rl6gtll2
+  %s
 
   $ rand -luns
-  3E0*6hp^
+  %s
 
   $ rand -nuc20
-  15NTQV4ASIN1UEQF0MXY
+  %s
 
   $ rand -c3
-  zp4
+  %s
 `
 
 var cmd = &cobra.Command{
 	Use:   "rand",
 	Short: "A random string and number generation utility.",
-	Long:  randInfo,
+	Long:  makeInfoText(info),
 	PreRun: func(_ *cobra.Command, _ []string) {
 		if !opts.Specials && !opts.Uppers && !opts.Lowers && !opts.Numbers {
 			opts.Lowers = true
@@ -65,4 +65,13 @@ func init() {
 	cmd.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
 	cmd.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
 	cmd.Flags().BoolVarP(&opts.Specials, "specials", "s", false, "include special characters like !, @, and #")
+}
+
+func makeInfoText(info string) string {
+	noArgsExample := rand.Make(rand.Options{Length: 8, Numbers: true, Lowers: true})
+	lunsExample := rand.Make(rand.Options{Length: 8, Numbers: true, Lowers: true, Specials: true, Uppers: true})
+	nuc20Example := rand.Make(rand.Options{Length: 20, Numbers: true, Uppers: true})
+	c3Example := rand.Make(rand.Options{Length: 3, Numbers: true, Lowers: true})
+
+	return fmt.Sprintf(info, noArgsExample, lunsExample, nuc20Example, c3Example)
 }

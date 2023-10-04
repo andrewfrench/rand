@@ -106,7 +106,7 @@ func init() {
 	cmd.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
 	cmd.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
 	cmd.Flags().BoolVarP(&opts.Specials, "specials", "s", false, "include special characters like !, @, and #")
-	cmd.Flags().BoolVarP(&opts.ToClipboard, "clipboard", "b", false, "write the output to the clipboard")
+	cmd.Flags().BoolVarP(&opts.ToClipboard, "clipboard", "b", false, "copy the output to the clipboard")
 }
 
 func makeInfoText(info string) string {

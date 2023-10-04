@@ -11,6 +11,7 @@ type Options struct {
 	Numbers  bool
 	Specials bool
 	Length   int
+	ToClipboard bool 
 }
 
 func Make(opts Options) string {

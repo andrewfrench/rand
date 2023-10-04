@@ -7,7 +7,10 @@ import (
 	"github.com/andrewfrench/rand/pkg/rand"
 
 	"github.com/spf13/cobra"
+	"github.com/atotto/clipboard"
 )
+
+const clipboardMessage = "Copied value to clipboard."
 
 var (
 	opts             = rand.Options{}
@@ -18,6 +21,7 @@ var (
 		Numbers:  true,
 		Specials: true,
 		Length:   32,
+		ToClipboard: true,
 	}
 )
 
@@ -45,9 +49,6 @@ Examples:
   $ rand
   %s
 
-  $ rand -p
-  %s
-
   $ rand -luns
   %s
 
@@ -55,6 +56,9 @@ Examples:
   %s
 
   $ rand -c3
+  %s
+
+  $ rand -p
   %s
 `
 
@@ -75,26 +79,41 @@ var cmd = &cobra.Command{
 		}
 	},
 	Run: func(_ *cobra.Command, _ []string) {
-		fmt.Println(rand.Make(opts))
+		value := rand.Make(opts)
+
+		if opts.ToClipboard {
+			err := clipboard.WriteAll(value)
+			if err != nil {
+				fmt.Println("Failed writing to clipboard: %s", err.Error())
+
+				os.Exit(1)
+			}
+
+			fmt.Println("Copied value to clipboard.")
+
+			return 
+		}
+
+		fmt.Println(value)
 	},
 }
 
 func init() {
-	cmd.Flags().BoolVarP(&passwordMode, "password", "p", false, "generate a password string")
+	cmd.Flags().BoolVarP(&passwordMode, "password", "p", false, "generate a password and write to the clipboard")
 
 	cmd.Flags().IntVarP(&opts.Length, "len", "c", 8, "sets the length, in characters, of the output")
 	cmd.Flags().BoolVarP(&opts.Lowers, "lowers", "l", false, "include lowercase letters a-z")
 	cmd.Flags().BoolVarP(&opts.Uppers, "uppers", "u", false, "include uppercase letters A-Z")
 	cmd.Flags().BoolVarP(&opts.Numbers, "numbers", "n", false, "include numerals 0-9")
 	cmd.Flags().BoolVarP(&opts.Specials, "specials", "s", false, "include special characters like !, @, and #")
+	cmd.Flags().BoolVarP(&opts.ToClipboard, "clipboard", "b", false, "write the output to the clipboard")
 }
 
 func makeInfoText(info string) string {
 	noArgsExample := rand.Make(rand.Options{Length: 8, Numbers: true, Lowers: true})
-	passwordExample := rand.Make(passwordModeOpts)
 	lunsExample := rand.Make(rand.Options{Length: 8, Numbers: true, Lowers: true, Specials: true, Uppers: true})
 	nuc20Example := rand.Make(rand.Options{Length: 20, Numbers: true, Uppers: true})
 	c3Example := rand.Make(rand.Options{Length: 3, Numbers: true, Lowers: true})
 
-	return fmt.Sprintf(info, noArgsExample, passwordExample, lunsExample, nuc20Example, c3Example)
+	return fmt.Sprintf(info, noArgsExample, lunsExample, nuc20Example, c3Example, clipboardMessage)
 }
